@@ -1,0 +1,71 @@
+itc_jsonapi.default_controller.path_resolve:
+  path: '/jsonapi/alias/resolve'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\AliasController::resolve'
+    _title: 'Path resolver'
+  requirements:
+    _permission: 'access content'
+itc_jsonapi.default_controller.search:
+  path: '/jsonapi/search/{index}'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\SearchController::search'
+    _title: 'search'
+  requirements:
+    _permission: 'access content'
+    index: '[a-zA-Z0-9_]+'
+  options:
+    parameters:
+      index:
+        type: entity:search_api_index
+itc_jsonapi.file_controller.file_upload:
+  path: '/jsonapi/file_data'
+  methods: ['POST']
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\FileController::fileUpload'
+    _title: 'File upload'
+  requirements:
+    _permission: 'access content'
+itc_jsonapi.webform_controller.validate:
+  path: '/jsonapi/webform/{webform}/validate'
+  methods: ['POST']
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\WebformController::validate'
+    _title: 'Webform validation'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+itc_jsonapi.webform_controller.submit:
+  path: '/jsonapi/webform/{webform}'
+  methods: ['POST']
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\WebformController::submit'
+    _title: 'Webform submit'
+  options:
+    parameters:
+      webform:
+        type: 'entity:webform'
+  requirements:
+    _permission: 'access content'
+itc_jsonapi.node_preview_controller.node_preview:
+  path: '/jsonapi/node_preview/{node_preview}'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\NodePreviewController::preview'
+    _title: 'Preview'
+  requirements:
+    _node_preview_access: '{node_preview}'
+  options:
+    parameters:
+      node_preview:
+        type: 'node_preview'
+itc_jsonapi.auth_controller.token:
+  path: '/auth/token'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\AuthController::token'
+    _title: 'Token authentication'
+  requirements:
+    _access: 'TRUE'
+  options:
+    _no_cache: TRUE
