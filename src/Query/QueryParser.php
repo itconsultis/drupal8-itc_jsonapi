@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 11/12/17
- * Time: 14:33
- */
 
 namespace Drupal\itc_jsonapi\Query;
 
-
+/**
+ *
+ */
 class QueryParser {
   const SORT_ASC = 'ASC';
 
@@ -18,7 +14,9 @@ class QueryParser {
 
   const DEFAULT_LIMIT = 10;
 
-
+  /**
+   *
+   */
   public function getFilter($filter_name, $filters) {
     if (!isset($filters[$filter_name])) {
       return NULL;
@@ -72,6 +70,9 @@ class QueryParser {
     return NULL;
   }
 
+  /**
+   *
+   */
   public function getSort($raw_sort) {
     $sort = [];
     $sort_fields = explode(',', $raw_sort);
@@ -93,6 +94,9 @@ class QueryParser {
     return $sort;
   }
 
+  /**
+   *
+   */
   public function getPager($page) {
     $limit = 10;
     $offset = 0;

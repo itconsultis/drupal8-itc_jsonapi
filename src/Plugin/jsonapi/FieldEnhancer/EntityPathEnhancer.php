@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 18/10/17
- * Time: 09:08
- */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
@@ -89,6 +83,9 @@ class EntityPathEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     return [];
   }
 
+  /**
+   *
+   */
   protected function doUndoTransform($value, Context $context) {
     /** @var \Drupal\pathauto\PathautoItem $pathautoItem */
     $pathautoItem = $context['object'];
@@ -135,10 +132,16 @@ class EntityPathEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     return $value;
   }
 
+  /**
+   *
+   */
   protected function doTransform($value, Context $context) {
     throw new \TypeError();
   }
 
+  /**
+   *
+   */
   public function getOutputJsonSchema() {
     $properties = [];
     foreach ($this->languageManager->getLanguages() as $language) {
@@ -159,6 +162,9 @@ class EntityPathEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     ];
   }
 
+  /**
+   *
+   */
   public function getSettingsForm(array $resource_field_info) {
     return [];
   }

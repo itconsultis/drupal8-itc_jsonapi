@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 29/11/17
- * Time: 14:19
- */
 
 namespace Drupal\itc_jsonapi\Controller;
-
 
 use Drupal\Component\Uuid\Php;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -17,8 +10,10 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
+/**
+ *
+ */
 class FileController implements ContainerInjectionInterface {
 
   /**
@@ -36,12 +31,18 @@ class FileController implements ContainerInjectionInterface {
    */
   protected $kernel;
 
+  /**
+   *
+   */
   public function __construct(FloodInterface $flood, Php $uuid, DrupalKernel $kernel) {
     $this->flood = $flood;
     $this->uuid = $uuid;
     $this->kernel = $kernel;
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('flood'),
@@ -50,6 +51,9 @@ class FileController implements ContainerInjectionInterface {
     );
   }
 
+  /**
+   *
+   */
   public function fileUpload(Request $request) {
     $method = $request->getMethod();
     if ($method !== 'POST') {
@@ -99,4 +103,5 @@ class FileController implements ContainerInjectionInterface {
     $response->headers->set('content-type', 'application/vnd.api+json');
     return $response;
   }
+
 }

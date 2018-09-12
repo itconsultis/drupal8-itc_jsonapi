@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 13/12/17
- * Time: 15:53
- */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
-
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\jsonapi_extras\Plugin\ResourceFieldEnhancerBase;
@@ -67,6 +60,9 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
     ];
   }
 
+  /**
+   *
+   */
   protected function doUndoTransform($value, Context $context) {
     $administrative_area = $value['administrative_area'];
     if (!empty($administrative_area)) {
@@ -84,7 +80,7 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
           $dependent_locality_subdivision = $this->subdivisionRepository->get($dependent_locality, [
             $value['country_code'],
             $administrative_area_subdivision->getCode(),
-            $locality_subdivision->getCode()
+            $locality_subdivision->getCode(),
           ]);
           if (!empty($dependent_locality_subdivision)) {
             $value['dependent_locality'] = $this->normalizeSubdivision($dependent_locality_subdivision);
@@ -95,25 +91,31 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
     return $value;
   }
 
+  /**
+   *
+   */
   protected function doTransform($value) {
     throw new \TypeError();
   }
 
+  /**
+   *
+   */
   public function getJsonSchema() {
     return [
       'type' => 'object',
       'properties' => [
         'additional_name' => [
           'type' => 'string',
-          'title' => 'The additional name.'
+          'title' => 'The additional name.',
         ],
         'address_line1' => [
           'type' => 'string',
-          'title' => 'The first line of the address block.'
+          'title' => 'The first line of the address block.',
         ],
         'address_line2' => [
           'type' => 'string',
-          'title' => 'The second line of the address block.'
+          'title' => 'The second line of the address block.',
         ],
         'administrative_area' => [
           'type' => 'object',
@@ -137,23 +139,23 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
         ],
         'country_code' => [
           'type' => 'string',
-          'title' => 'The two-letter country code.'
+          'title' => 'The two-letter country code.',
         ],
         'dependent_locality' => [
           'type' => 'string',
-          'title' => 'The dependent locality (i.e. neighbourhood).'
+          'title' => 'The dependent locality (i.e. neighbourhood).',
         ],
         'family_name' => [
           'type' => 'string',
-          'title' => 'The family name.'
+          'title' => 'The family name.',
         ],
         'given_name' => [
           'type' => 'string',
-          'title' => 'The given name.'
+          'title' => 'The given name.',
         ],
         'langcode' => [
           'type' => 'string',
-          'title' => 'The language code.'
+          'title' => 'The language code.',
         ],
         'locality' => [
           'type' => 'object',
@@ -177,20 +179,23 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
         ],
         'organization' => [
           'type' => 'string',
-          'title' => 'The organization'
+          'title' => 'The organization',
         ],
         'postal_code' => [
           'type' => 'string',
-          'title' => 'The postal code.'
+          'title' => 'The postal code.',
         ],
         'sorting_code' => [
           'type' => 'string',
-          'title' => 'The sorting code.'
+          'title' => 'The sorting code.',
         ],
-      ]
+      ],
     ];
   }
 
+  /**
+   *
+   */
   public function getSettingsForm(array $resource_field_info) {
     return [];
   }
@@ -201,4 +206,5 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
   public function defaultConfiguration() {
     return [];
   }
+
 }

@@ -27,6 +27,9 @@ class LanguageNegotiationQueryOrUrl extends LanguageNegotiationUrl {
    */
   const METHOD_ID = 'language-query-url';
 
+  /**
+   *
+   */
   public function getLangcode(Request $request = NULL) {
     if ($request) {
       $pathInfo = $request->getPathInfo();
@@ -53,4 +56,5 @@ class LanguageNegotiationQueryOrUrl extends LanguageNegotiationUrl {
     }
     return parent::getLangcode($request);
   }
+
 }

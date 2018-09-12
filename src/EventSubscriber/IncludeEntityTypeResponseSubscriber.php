@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 21/06/18
- * Time: 10:31
- */
 
 namespace Drupal\itc_jsonapi\EventSubscriber;
 
@@ -31,11 +25,17 @@ class IncludeEntityTypeResponseSubscriber implements EventSubscriberInterface {
    */
   protected $routeMatch;
 
+  /**
+   *
+   */
   public function __construct(EntityTypeInclude $entity_type_include, CurrentRouteMatch $route_match) {
     $this->entityTypeInclude = $entity_type_include;
     $this->routeMatch = $route_match;
   }
 
+  /**
+   *
+   */
   public function onKernelRequest(FilterControllerEvent $event) {
     $route_name = $this->routeMatch->getRouteName();
     $is_paragraph_route = (strpos($route_name, 'jsonapi.paragraph') === 0 &&
@@ -49,8 +49,12 @@ class IncludeEntityTypeResponseSubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   *
+   */
   public static function getSubscribedEvents() {
     $events[KernelEvents::CONTROLLER][] = ['onKernelRequest', 100];
     return $events;
   }
+
 }

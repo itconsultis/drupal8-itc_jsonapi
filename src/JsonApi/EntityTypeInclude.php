@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 04/07/18
- * Time: 21:14
- */
 
 namespace Drupal\itc_jsonapi\JsonApi;
-
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -16,6 +9,9 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ *
+ */
 class EntityTypeInclude {
 
   /**
@@ -39,11 +35,17 @@ class EntityTypeInclude {
 
   protected $cacheTags = [];
 
+  /**
+   *
+   */
   public function __construct(CurrentRouteMatch $route_match, CacheBackendInterface $cache) {
     $this->routeMatch = $route_match;
     $this->cache = $cache;
   }
 
+  /**
+   *
+   */
   protected function getAllowedFields(FieldableEntityInterface $entity) {
     $field_definitions = $entity->getFieldDefinitions();
     $field_key = $entity->getEntityTypeId() . '--' . $entity->bundle();
@@ -58,6 +60,9 @@ class EntityTypeInclude {
     return $this->fields[$field_key];
   }
 
+  /**
+   *
+   */
   protected function computeCid(FieldableEntityInterface $entity) {
     $cache_tag = $entity->getEntityTypeId() . ':' . $entity->id();
     $string_fields = json_encode($this->fields);
@@ -69,6 +74,9 @@ class EntityTypeInclude {
     return md5($cache_tag . $string_fields . $string_exclude . $revision_id);
   }
 
+  /**
+   *
+   */
   public function computeInclude(FieldableEntityInterface $entity, $prefix = '', $exclude = []) {
     $this->cacheTags[] = $entity->getEntityTypeId() . ':' . $entity->id();
     $allowed_fields = $this->getAllowedFields($entity);
@@ -104,6 +112,9 @@ class EntityTypeInclude {
     return $include;
   }
 
+  /**
+   *
+   */
   public function transformRequest(Request $request) {
     $raw_include = $request->query->get('include', '');
     $include = is_array($raw_include) ? $raw_include : explode(',', $raw_include);

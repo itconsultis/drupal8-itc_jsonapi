@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 04/07/18
- * Time: 10:51
- */
 
 namespace Drupal\itc_jsonapi;
-
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -23,21 +16,29 @@ use Firebase\JWT\JWT as JWTencoder;
 class JWT {
 
   /**
+   * Request.
+   *
    * @var null|\Symfony\Component\HttpFoundation\Request
    */
   protected $request;
 
   /**
+   * Key.
+   *
    * @var string
    */
   protected $key;
 
   /**
+   * Logger.
+   *
    * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
   /**
+   * AccountProxyInterface.
+   *
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $account;
@@ -48,6 +49,10 @@ class JWT {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account
+   *   Request stack service.
+   * @param \Psr\Log\LoggerInterface $logger
    *   Request stack service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, RequestStack $request_stack, AccountProxyInterface $account, LoggerInterface $logger) {
@@ -63,7 +68,7 @@ class JWT {
    * @param mixed $data
    *   Data to encode.
    * @param array $opts
-   *   - host: set token iss and aud.
+   *   Host: set token iss and aud.
    */
   public function encode($data, array $opts = []) {
     if (empty($this->key)) {
@@ -92,11 +97,15 @@ class JWT {
   }
 
   /**
+   * Return current User Token.
+   *
    * @return array
+   *   Return User Token.
    */
   public function getCurrentUserToken() {
     if ($this->account->isAuthenticated()) {
       return $this->encode(['user' => $this->account->id()]);
     }
   }
+
 }

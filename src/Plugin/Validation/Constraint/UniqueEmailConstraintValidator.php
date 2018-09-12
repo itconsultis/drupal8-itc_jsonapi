@@ -1,21 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 31/10/17
- * Time: 14:15
- */
 
 namespace Drupal\itc_jsonapi\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-
+/**
+ *
+ */
 class UniqueEmailConstraintValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
@@ -25,10 +20,16 @@ class UniqueEmailConstraintValidator extends ConstraintValidator implements Cont
    */
   protected $entityTypeManager;
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container) {
     return new static($container->get('entity_type.manager'));
   }
 
+  /**
+   *
+   */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->entityTypeManager = $entity_type_manager;
   }
@@ -51,4 +52,5 @@ class UniqueEmailConstraintValidator extends ConstraintValidator implements Cont
       $this->context->addViolation($constraint->notUnique, ['%email' => implode(',', $emails)]);
     }
   }
+
 }

@@ -1,23 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 04/06/18
- * Time: 10:51
- */
 
 namespace Drupal\itc_jsonapi;
 
+use Drupal\jsonapi\EntityToJsonApi;
 use Drupal\Core\Entity\EntityInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 
 /**
- * Class EntityToJsonApi
+ * Class EntityToJsonApi.
  *
  * @package Drupal\itc_jsonapi
  */
-class EntityToJsonApi extends \Drupal\jsonapi\EntityToJsonApi {
+class EntityToJsonApi extends EntityToJsonApi {
 
   /**
    * Calculate the context for the serialize/normalize operation.
@@ -31,9 +24,10 @@ class EntityToJsonApi extends \Drupal\jsonapi\EntityToJsonApi {
   protected function calculateContext(EntityInterface $entity) {
     $context = parent::calculateContext($entity);
     $master_request = $this->requestStack->getMasterRequest();
-    /** @var Request $request */
+    /** @var \Symfony\Component\HttpFoundation\Request $request */
     $request = $context['request'];
     $request->query->replace($master_request->query->all());
     return $context;
   }
+
 }

@@ -56,7 +56,7 @@ class Token implements AuthenticationProviderInterface {
   public function applies(Request $request) {
     $pathInfo = $request->getpathInfo();
     if (strpos($pathInfo, '/jsonapi') === 0) {
-      return $request->headers->has('Authorization');  
+      return $request->headers->has('Authorization');
     }
     // If you return TRUE and the method Authentication logic fails,
     // you will get out from Drupal navigation if you are logged in.
@@ -78,7 +78,7 @@ class Token implements AuthenticationProviderInterface {
   }
 
   /**
-   * get access token from header
+   * Get access token from header.
    * */
   public function getBearerToken($bearer) {
     if (!empty($bearer)) {
@@ -110,7 +110,7 @@ class Token implements AuthenticationProviderInterface {
   }
 
   /**
-   * FirebaseJWT handle hmac tampering test himself
+   * FirebaseJWT handle hmac tampering test himself.
    */
   private function jwtDecode($jwt, $key) {
     try {
@@ -119,7 +119,7 @@ class Token implements AuthenticationProviderInterface {
       return $decoded_array;
     }
     catch (\Exception $e) {
-      // Token is not valid, nothing to log
+      // Token is not valid, nothing to log.
       return NULL;
     }
   }

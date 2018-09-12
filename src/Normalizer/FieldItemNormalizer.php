@@ -1,20 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 09/04/18
- * Time: 09:17
- */
 
 namespace Drupal\itc_jsonapi\Normalizer;
 
-
+use Drupal\jsonapi_extras\Normalizer\FieldItemNormalizer as FieldItemNormalizerExtra;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\jsonapi\Normalizer\Value\FieldItemNormalizerValue;
 use Shaper\Util\Context;
 
-class FieldItemNormalizer extends \Drupal\jsonapi_extras\Normalizer\FieldItemNormalizer {
+/**
+ *
+ */
+class FieldItemNormalizer extends FieldItemNormalizerExtra {
 
+  /**
+   *
+   */
   public function normalize($object, $format = NULL, array $context = []) {
     switch ($object->getPluginId()) {
       case 'field_item:path':
@@ -28,6 +28,9 @@ class FieldItemNormalizer extends \Drupal\jsonapi_extras\Normalizer\FieldItemNor
     }
   }
 
+  /**
+   *
+   */
   protected function enhance($normalized_output, $object, $format = NULL, array $context = []) {
     $resource_type = $context['resource_type'];
     $enhancer = $resource_type->getFieldEnhancer($object->getParent()->getName());

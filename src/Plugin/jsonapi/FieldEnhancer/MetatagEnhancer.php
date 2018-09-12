@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 02/03/18
- * Time: 17:13
- */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
-
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Shaper\Util\Context;
@@ -63,6 +56,9 @@ class MetatagEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
     $this->routeMatch = $route_match;
   }
 
+  /**
+   *
+   */
   protected function doUndoTransform($value, Context $context) {
     if ($this->metatagManager === NULL) {
       return $value;
@@ -75,13 +71,18 @@ class MetatagEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
     return array_values($elements);
   }
 
+  /**
+   *
+   */
   protected function doTransform($value, Context $context) {
     throw new \TypeError();
   }
 
+  /**
+   *
+   */
   public function getOutputJsonSchema() {
     return [];
   }
-
 
 }

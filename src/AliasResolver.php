@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 02/07/18
- * Time: 17:23
- */
 
 namespace Drupal\itc_jsonapi;
-
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -15,6 +8,9 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 
+/**
+ *
+ */
 class AliasResolver {
 
   /**
@@ -33,7 +29,7 @@ class AliasResolver {
   protected $frontPath;
 
   /**
-   * @var AliasManagerInterface
+   * @var \Drupal\Core\Path\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -46,7 +42,9 @@ class AliasResolver {
 
   protected $domainRedirects;
 
-
+  /**
+   *
+   */
   public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->languageManager = $language_manager;
     $this->urlPrefixes = $config_factory->get('language.negotiation')->get('url.prefixes');
@@ -58,7 +56,9 @@ class AliasResolver {
 
   }
 
-
+  /**
+   *
+   */
   public function getLanguage($alias) {
     $enabled_languages = $this->languageManager->getLanguages();
     foreach ($enabled_languages as $l) {
@@ -71,6 +71,9 @@ class AliasResolver {
     return $this->languageManager->getCurrentLanguage();
   }
 
+  /**
+   *
+   */
   public function stripLanguagePrefix($alias, LanguageInterface $language) {
     $prefix = $this->urlPrefixes[$language->getId()];
     if (empty($prefix)) {
@@ -80,6 +83,9 @@ class AliasResolver {
     return substr($alias, strlen($language_prefix));
   }
 
+  /**
+   *
+   */
   public function stripTrailingSlash($alias) {
     if ($alias[-1] === '/' && strlen($alias) > 1) {
       return substr($alias, 0, -1);
@@ -87,6 +93,9 @@ class AliasResolver {
     return $alias;
   }
 
+  /**
+   *
+   */
   public function resolve($raw_alias) {
     $language = $this->getLanguage($raw_alias);
     $alias = $this->stripTrailingSlash($this->stripLanguagePrefix($raw_alias, $language));
@@ -103,6 +112,9 @@ class AliasResolver {
     return NULL;
   }
 
+  /**
+   *
+   */
   public function getRedirect($alias, $host) {
     $path = $alias;
     $key = str_replace('.', ':', $host);
@@ -116,4 +128,5 @@ class AliasResolver {
     }
     return NULL;
   }
+
 }

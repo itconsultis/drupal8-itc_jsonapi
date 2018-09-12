@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 27/11/17
- * Time: 11:09
- */
 
 namespace Drupal\itc_jsonapi\Normalizer;
-
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -16,7 +9,7 @@ use Drupal\search_api\Item\ItemInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * Class SearchApiItemNodeNormalizer
+ * Class SearchApiItemNodeNormalizer.
  *
  * @package Drupal\itc_jsonapi\Normalizer
  */
@@ -107,6 +100,5 @@ class SearchApiItemNodeNormalizer implements NormalizerInterface {
     }
     return $data instanceof ItemInterface;
   }
-
 
 }

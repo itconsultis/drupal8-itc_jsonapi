@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 17/01/18
- * Time: 17:51
- */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
-
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\jsonapi_extras\Plugin\ResourceFieldEnhancerBase;
@@ -15,7 +8,7 @@ use Shaper\Util\Context;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Return embed and thumbnail url instead of user input
+ * Return embed and thumbnail url instead of user input.
  *
  * @ResourceFieldEnhancer(
  *   id = "media_video",
@@ -30,6 +23,9 @@ class MediaVideoEnhancer extends ResourceFieldEnhancerBase implements ContainerF
    */
   protected $providerManager;
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $provider_manager = NULL;
     if ($container->has('video_embed_field.provider_manager')) {
@@ -44,11 +40,17 @@ class MediaVideoEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     );
   }
 
+  /**
+   *
+   */
   public function __construct(array $configuration, string $plugin_id, $plugin_definition, $provider_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->providerManager = $provider_manager;
   }
 
+  /**
+   *
+   */
   protected function doUndoTransform($value, Context $context) {
     $provider = $this->providerManager->loadProviderFromInput($value);
     $thumbnail = $provider->getRemoteThumbnailUrl();
@@ -60,10 +62,16 @@ class MediaVideoEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     ];
   }
 
+  /**
+   *
+   */
   protected function doTransform($value, Context $context) {
     throw new \TypeError();
   }
 
+  /**
+   *
+   */
   public function getOutputJsonSchema() {
     return [
       'type' => 'object',
@@ -74,6 +82,9 @@ class MediaVideoEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     ];
   }
 
+  /**
+   *
+   */
   protected function getVideoUrl($embed_code) {
     switch ($embed_code['#type']) {
       case 'video_embed_iframe':
@@ -89,4 +100,5 @@ class MediaVideoEnhancer extends ResourceFieldEnhancerBase implements ContainerF
         throw new \Exception('Unsupported embed code type.');
     }
   }
+
 }

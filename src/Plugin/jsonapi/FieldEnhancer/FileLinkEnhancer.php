@@ -2,10 +2,8 @@
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Url;
 use Drupal\jsonapi_extras\Plugin\ResourceFieldEnhancerBase;
 use Shaper\Util\Context;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,12 +12,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Transform canonical link into path alias if available.
  *
  * @ResourceFieldEnhancer(
- *   id = "canonical_link_to_alias",
- *   label = @Translation("Canonical link to alias"),
- *   description = @Translation("Transform canonical link into path alias if available")
+ *   id = "file_link_enhancer",
+ *   label = @Translation("Relative file path to full path"),
+ *   description = @Translation("Relative file path to full path")
  * )
  */
-class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements ContainerFactoryPluginInterface {
+class FileLinkEnhancer extends ResourceFieldEnhancerBase implements ContainerFactoryPluginInterface {
 
 
   /**
@@ -52,25 +50,10 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function defaultConfiguration() {
-    return [];
-  }
-
-  /**
    *
    */
   protected function doUndoTransform($data, Context $context) {
-    $language = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
-    $uri = $data['uri'];
-    $url = Url::fromUri($uri, [
-      'language' => $language,
-    ]);
-    $next_value = $data;
-    $next_value['uri'] = $url->toString(TRUE)->getGeneratedUrl();;
-
-    return $next_value;
+    return $GLOBALS['base_url'] . $data;
   }
 
   /**
@@ -83,28 +66,10 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
   /**
    *
    */
-  public function prepareForInput($value) {
-    return $value;
-  }
-
-  /**
-   *
-   */
   public function getOutputJsonSchema() {
     return [
-      'type' => 'object',
-      'properties' => [
-        'uri' => 'string',
-        'title' => 'string',
-      ],
+      'type' => 'string',
     ];
-  }
-
-  /**
-   *
-   */
-  public function getSettingsForm(array $resource_field_info) {
-    return [];
   }
 
 }

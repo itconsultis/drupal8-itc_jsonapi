@@ -16,10 +16,11 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    foreach($collection as $route) {
-      if(strpos($route->getPath(),'/jsonapi') === 0){
+    foreach ($collection as $route) {
+      if (strpos($route->getPath(), '/jsonapi') === 0) {
         $route->setOption('_auth', ['token', 'cookie']);
       }
     }
   }
+
 }

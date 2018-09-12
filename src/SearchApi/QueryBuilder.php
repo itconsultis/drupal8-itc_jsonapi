@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bertrand
- * Date: 27/11/17
- * Time: 11:36
- */
 
 namespace Drupal\itc_jsonapi\SearchApi;
-
 
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -18,6 +11,9 @@ use Drupal\search_api\Query\QueryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ *
+ */
 class QueryBuilder {
 
   const SORT_ASC = 'ASC';
@@ -34,13 +30,18 @@ class QueryBuilder {
    */
   protected $queryParser;
 
+  /**
+   *
+   */
   public function __construct(LanguageManagerInterface $language_manager, EventDispatcherInterface $event_dispatcher, QueryParser $query_parser) {
     $this->languageManager = $language_manager;
     $this->eventDispatcher = $event_dispatcher;
     $this->queryParser = $query_parser;
   }
 
-
+  /**
+   *
+   */
   public function applyFilters($filters, QueryInterface $query, $allowed_fields = []) {
     $and_condition_group = $query->createConditionGroup('AND');
     if (is_array($filters)) {
@@ -59,6 +60,9 @@ class QueryBuilder {
     }
   }
 
+  /**
+   *
+   */
   public function applyLanguageFilter($langcode = '', QueryInterface $query) {
     $index = $query->getIndex();
     $field_names = array_keys($index->getFields());
@@ -72,6 +76,9 @@ class QueryBuilder {
     $query->addCondition('language', $language->getId());
   }
 
+  /**
+   *
+   */
   public function applySort($sort, QueryInterface $query, $allowed_fields = []) {
     $sort = $this->queryParser->getSort($sort);
     foreach ($sort as $sort_item) {
@@ -81,11 +88,17 @@ class QueryBuilder {
     }
   }
 
+  /**
+   *
+   */
   public function applyPager($page, QueryInterface $query) {
     $pager = $this->queryParser->getPager($page);
     $query->range($pager['offset'], $pager['limit']);
   }
 
+  /**
+   *
+   */
   public function buildFromRequest(Request $request, IndexInterface $index = NULL) {
     if (empty($index)) {
       $index = $request->get('index');
@@ -112,4 +125,5 @@ class QueryBuilder {
     $this->eventDispatcher->dispatch(QueryBuilderEvents::QUERY_CREATED, new QueryCreatedEvent($query));
     return $query;
   }
+
 }

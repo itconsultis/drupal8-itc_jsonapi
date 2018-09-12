@@ -4,24 +4,17 @@ namespace Drupal\itc_jsonapi\Controller;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\AliasManagerInterface;
-use Drupal\Core\Url;
 use Drupal\itc_jsonapi\AliasResolver;
-use Drupal\itc_jsonapi\CacheableJsonApiResponse;
 use Drupal\itc_jsonapi\SearchApi\QueryBuilder;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\Query;
-use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -87,7 +80,6 @@ class SearchController extends ControllerBase {
    *
    * @param \Drupal\search_api\IndexInterface $index
    * @param \Symfony\Component\HttpFoundation\Request $request
-   *
    */
   public function search(IndexInterface $index, Request $request) {
     $query = $this->queryBuilder->buildFromRequest($request, $index);
@@ -113,7 +105,7 @@ class SearchController extends ControllerBase {
       $cacheable_res->addCacheableDependency($cache_metadata);
       return $cacheable_res;
     }
-    $meta = ['count' => $result->getResultCount(),];
+    $meta = ['count' => $result->getResultCount()];
     $items = [];
     /** @var \Drupal\search_api\Item\ItemInterface $item */
     foreach ($result as $item) {
