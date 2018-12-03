@@ -69,3 +69,10 @@ itc_jsonapi.auth_controller.token:
     _access: 'TRUE'
   options:
     _no_cache: TRUE
+itc_jsonapi.metatag_controller.metatag:
+  path: '/jsonapi/metatag'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\MetatagController:metatag'
+    _title: 'Get metatag'
+  requirements:
+    _access: 'TRUE'
