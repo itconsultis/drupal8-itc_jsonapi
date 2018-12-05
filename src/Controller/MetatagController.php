@@ -75,7 +75,7 @@ class MetatagController {
       $this->cache->set($cache_key, $data, Cache::PERMANENT, $entity->getCacheTags());
       $cache_item = $this->cache->get($cache_key);
     }
-    $response = new JsonApiResponse(json_encode($cache_item->data['data']));
+    $response = new JsonApiResponse(json_encode($cache_item->data));
     return $response;
   }
 }
