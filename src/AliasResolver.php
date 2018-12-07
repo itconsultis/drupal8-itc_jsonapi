@@ -63,9 +63,11 @@ class AliasResolver {
     $enabled_languages = $this->languageManager->getLanguages();
     foreach ($enabled_languages as $l) {
       $language_prefix = '/' . $this->urlPrefixes[$l->getId()];
-      if (strlen($language_prefix) > 0 && strpos($alias, $language_prefix) === 0) {
-        $language = $l;
-        return $language;
+      if ($alias === $language_prefix) {
+        return $l;
+      }
+      if (strlen($language_prefix) > 0 && strpos($alias, $language_prefix . '/') === 0) {
+        return $l;
       }
     }
     return $this->languageManager->getCurrentLanguage();
@@ -80,7 +82,10 @@ class AliasResolver {
       return $alias;
     }
     $language_prefix = '/' . $prefix;
-    $cleanedAlias = substr($alias, strlen($language_prefix));
+    if ($language_prefix === $alias) {
+      return '/';
+    }
+    $cleanedAlias = substr($alias, strlen($language_prefix) . '/');
     if (empty($cleanedAlias)) {
       return '/';
     }
