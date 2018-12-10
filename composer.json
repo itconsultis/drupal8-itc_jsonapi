@@ -9,6 +9,7 @@
   "require": {
     "php": ">=7.2.0",
     "drupal/core": "^8.5",
-    "drupal/jsonapi_extras": "2.10"
+    "drupal/jsonapi_extras": "2.10",
+    "firebase/php-jwt": "^5.0"
   }
 }
