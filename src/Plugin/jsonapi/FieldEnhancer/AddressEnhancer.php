@@ -99,7 +99,7 @@ class AddressEnhancer extends ResourceFieldEnhancerBase implements ContainerFact
     throw new \TypeError();
   }
 
-  public function getJsonSchema() {
+  public function getOutputJsonSchema() {
     return [
       'type' => 'object',
       'properties' => [
