@@ -37,39 +37,3 @@ function itc_jsonapi_entity_type_build(array &$entity_types) {
     $menu_link_content_type->setHandlerClass('access', MenuLinkContentAccessControlHandler::class);
   }
 }
-
-/**
- * Implements hook_entity_bundle_field_info_alter().
- *
- * @param \Drupal\Core\Field\FieldDefinitionInterface[] $fields
- */
-function itc_jsonapi_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  if ($entity_type->id() === 'contact_message'
-    && $bundle === 'newsletter') {
-    if (isset($fields['field_email'])) {
-      $fields['field_email']->addConstraint('unique_email');
-    }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function itc_jsonapi_contact_message_insert(EntityInterface $entity) {
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-  if (strpos($route_name, 'jsonapi.contact_message') === 0) {
-    /** @var \Drupal\contact\MessageInterface $message */
-    $message = $entity;
-    /** @var \Drupal\contact\MailHandlerInterface $mail_handler */
-    $mail_handler = \Drupal::service('contact.mail_handler');
-    $mail_handler->sendMailMessages($message, \Drupal::currentUser());
-  }
-}
-
-/**
- *
- */
-function itc_jsonapi_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Preview not available using jsonapi.
-}
