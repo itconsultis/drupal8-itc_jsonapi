@@ -19,11 +19,6 @@ services:
     arguments: ['@config.factory']
     tags:
     - { name: event_subscriber }
-  itc_jsonapi.include_entity_type_response_subscriber:
-    class: Drupal\itc_jsonapi\EventSubscriber\IncludeEntityTypeResponseSubscriber
-    arguments: ['@itc_jsonapi.entity_type_include', '@current_route_match']
-    tags:
-    - { name: event_subscriber }
   itc_jsonapi.query_parser:
     class: Drupal\itc_jsonapi\Query\QueryParser
   itc_jsonapi.search_api.query_builder:
@@ -44,6 +39,3 @@ services:
   itc_jsonapi.jwt:
     class: Drupal\itc_jsonapi\JWT
     arguments: ['@config.factory', '@request_stack', '@current_user', '@logger.channel.itc_jsonapi']
-  itc_jsonapi.entity_type_include:
-    class: Drupal\itc_jsonapi\JsonApi\EntityTypeInclude
-    arguments: ['@current_route_match', '@cache.itc_jsonapi_include']
