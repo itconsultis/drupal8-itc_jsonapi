@@ -1,12 +1,12 @@
 itc_jsonapi.default_controller.path_resolve:
-  path: '/jsonapi/alias/resolve'
+  path: '/api/alias/resolve'
   defaults:
     _controller: '\Drupal\itc_jsonapi\Controller\AliasController::resolve'
     _title: 'Path resolver'
   requirements:
     _permission: 'access content'
 itc_jsonapi.default_controller.search:
-  path: '/jsonapi/search/{index}'
+  path: '/api/search/{index}'
   defaults:
     _controller: '\Drupal\itc_jsonapi\Controller\SearchController::search'
     _title: 'search'
@@ -18,7 +18,7 @@ itc_jsonapi.default_controller.search:
       index:
         type: entity:search_api_index
 itc_jsonapi.file_controller.file_upload:
-  path: '/jsonapi/file_data'
+  path: '/api/file_data'
   methods: ['POST']
   defaults:
     _controller: '\Drupal\itc_jsonapi\Controller\FileController::fileUpload'
@@ -59,7 +59,7 @@ itc_jsonapi.auth_controller.token:
   options:
     _no_cache: TRUE
 itc_jsonapi.metatag_controller.metatag:
-  path: '/jsonapi/metatag'
+  path: '/api/metatag'
   defaults:
     _controller: '\Drupal\itc_jsonapi\Controller\MetatagController:metatag'
     _title: 'Get metatag'
