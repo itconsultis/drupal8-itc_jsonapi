@@ -1,6 +1,13 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 02/08/18
+ * Time: 17:13
+ */
 
 namespace Drupal\itc_jsonapi\Controller;
+
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
@@ -133,5 +140,4 @@ class AliasController implements ContainerInjectionInterface {
     $cacheable_res->addCacheableDependency($entity);
     return $cacheable_res;
   }
-
 }

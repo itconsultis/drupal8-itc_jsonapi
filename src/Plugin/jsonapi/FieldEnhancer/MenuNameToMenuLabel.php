@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 02/04/18
+ * Time: 13:50
+ */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
@@ -7,6 +13,7 @@ use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\jsonapi_extras\Plugin\ResourceFieldEnhancerBase;
+use Drupal\language\ConfigurableLanguageManager;
 use Shaper\Util\Context;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,7 +39,7 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
   /**
    * Service entity_type.manager.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
@@ -41,9 +48,6 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
    */
   protected $moduleHandler;
 
-  /**
-   *
-   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
@@ -55,9 +59,6 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
     );
   }
 
-  /**
-   *
-   */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManager $language_manager, EntityTypeManagerInterface $entity_type_manager, ModuleHandler $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
@@ -65,16 +66,10 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
     $this->moduleHandler = $module_handler;
   }
 
-  /**
-   *
-   */
   protected function doTransform($data, Context $context) {
     throw new \TypeError();
   }
 
-  /**
-   *
-   */
   protected function doUndoTransform($data, Context $context) {
     $menu_storage = $this->entityTypeManager->getStorage('menu');
     $menu = $menu_storage->load($data);
@@ -100,9 +95,6 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
     ];
   }
 
-  /**
-   *
-   */
   public function getOutputJsonSchema() {
     return [
       'type' => 'object',
@@ -116,5 +108,6 @@ class MenuNameToMenuLabel extends ResourceFieldEnhancerBase implements Container
       ],
     ];
   }
+
 
 }

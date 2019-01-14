@@ -51,15 +51,15 @@ class MetatagController {
     $cache_item = $this->cache->get($cache_key);
     if (empty($cache_item)) {
       if (!in_array($entity_type, self::ALLOWED_ENTITY_TYPES)) {
-        return new JsonApiResponse();
+        return new JsonApiResponse('', 400);
       }
       if (!is_string($uuid)) {
-        return new JsonApiResponse();
+        return new JsonApiResponse('', 400);
       }
       /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
       $entity = $this->entityRepository->loadEntityByUuid($entity_type, $uuid);
       if (empty($entity)) {
-        return new JsonApiResponse();
+        return new JsonApiResponse('', 404);
       }
       if ($entity->hasTranslation($langcode)) {
         $entity = $entity->getTranslation($langcode);

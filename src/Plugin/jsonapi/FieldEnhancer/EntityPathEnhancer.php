@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 18/10/17
+ * Time: 09:08
+ */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
@@ -83,65 +89,36 @@ class EntityPathEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     return [];
   }
 
-  /**
-   *
-   */
   protected function doUndoTransform($value, Context $context) {
-    /** @var \Drupal\pathauto\PathautoItem $pathautoItem */
-    $pathautoItem = $context['object'];
-    ['source' => $path] = $pathautoItem->getValue();
-    $entity = $pathautoItem->getEntity();
-    $entity_type = $entity->getEntityTypeId();
-    $entity_id = $entity->id();
-    $front_path = \Drupal::config('system.site')->get('page.front');
+    $path = $this->aliasManager->getPathByAlias($value['alias'], $value['langcode']);
+    $params = Url::fromUserInput($path)->getRouteParameters();
+    $entity_type = key($params);
+    $entity_id = current($params);
+    $storage = $this->entityTypeManager->getStorage($entity_type);
+    $entity = $storage->load($entity_id);
     if ($entity instanceof TranslatableInterface) {
       $paths = [];
-      if ($path !== $front_path) {
-        foreach ($entity->getTranslationLanguages() as $language) {
-          $url = Url::fromRoute("entity.${entity_type}.canonical",
-            [$entity_type => $entity_id],
-            [
-              'language' => $language,
-            ]
-          );
-          $paths[$language->getId()] = [
-            'alias' => $url->toString(TRUE)->getGeneratedUrl(),
-            'langcode' => $language->getId(),
-          ];
-        }
-        return $paths;
+      foreach ($entity->getTranslationLanguages() as $language) {
+        $url = Url::fromRoute("entity.${entity_type}.canonical",
+          [$entity_type => $entity_id],
+          [
+            'language' => $language,
+          ]
+        );
+        $paths[$language->getId()] = [
+          'alias' => $url->toString(TRUE)->getGeneratedUrl(),
+          'langcode' => $language->getId(),
+        ];
       }
-      else {
-        foreach ($entity->getTranslationLanguages() as $language) {
-          if ($language->isDefault()) {
-            $paths[$language->getId()] = [
-              'alias' => '/',
-              'langcode' => $this->prefixes[$language->getId()],
-            ];
-          }
-          else {
-            $paths[$language->getId()] = [
-              'alias' => '/' . $this->prefixes[$language->getId()],
-              'langcode' => $language->getId(),
-            ];
-          }
-        }
-        return $paths;
-      }
+      return $paths;
     }
     return $value;
   }
 
-  /**
-   *
-   */
   protected function doTransform($value, Context $context) {
     throw new \TypeError();
   }
 
-  /**
-   *
-   */
   public function getOutputJsonSchema() {
     $properties = [];
     foreach ($this->languageManager->getLanguages() as $language) {
@@ -162,9 +139,6 @@ class EntityPathEnhancer extends ResourceFieldEnhancerBase implements ContainerF
     ];
   }
 
-  /**
-   *
-   */
   public function getSettingsForm(array $resource_field_info) {
     return [];
   }

@@ -8,7 +8,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\itc_jsonapi\AliasResolver;
 use Drupal\itc_jsonapi\SearchApi\QueryBuilder;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\Query;
@@ -54,8 +53,7 @@ class SearchController extends ControllerBase {
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     QueryBuilder $query_builder,
-    Serializer $serializer,
-    AliasResolver $alias_resolver
+    Serializer $serializer
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -87,7 +85,6 @@ class SearchController extends ControllerBase {
       $result = $query->execute();
     }
     catch (\Exception $e) {
-      kint($e);
       $response = new JsonResponse([
         'errors' => [
           'Unexpected error.',
@@ -105,7 +102,7 @@ class SearchController extends ControllerBase {
       $cacheable_res->addCacheableDependency($cache_metadata);
       return $cacheable_res;
     }
-    $meta = ['count' => $result->getResultCount()];
+    $meta = ['count' => $result->getResultCount(),];
     $items = [];
     /** @var \Drupal\search_api\Item\ItemInterface $item */
     foreach ($result as $item) {
@@ -117,7 +114,7 @@ class SearchController extends ControllerBase {
       ->getStorage('node')
       ->loadMultiple(array_keys($items));
     $data = [];
-    $language = $this->languageManager->getLanguage($request->query->get('language'));
+    $language = $this->languageManager->getLanguage($request->query->get('langcode'));
     if (empty($language)) {
       $language = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
     }

@@ -1,15 +1,19 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 25/10/17
+ * Time: 13:45
+ */
 
 namespace Drupal\itc_jsonapi\EventSubscriber;
+
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-/**
- *
- */
 class ContactMessageResponseSubscriber implements EventSubscriberInterface {
 
   /**
@@ -19,16 +23,10 @@ class ContactMessageResponseSubscriber implements EventSubscriberInterface {
    */
   protected $configFactory;
 
-  /**
-   *
-   */
   public function __construct(ConfigFactoryInterface $config_factory) {
     $this->configFactory = $config_factory;
   }
 
-  /**
-   *
-   */
   public function onKernelResponse(FilterResponseEvent $event) {
     $request = $event->getRequest();
     $response = $event->getResponse();
@@ -43,9 +41,6 @@ class ContactMessageResponseSubscriber implements EventSubscriberInterface {
     }
   }
 
-  /**
-   *
-   */
   public static function getSubscribedEvents() {
     $events[KernelEvents::RESPONSE][] = ['onKernelResponse', 100];
     return $events;

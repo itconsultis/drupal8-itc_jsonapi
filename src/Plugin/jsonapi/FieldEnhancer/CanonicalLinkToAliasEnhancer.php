@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 18/10/17
+ * Time: 09:08
+ */
 
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
@@ -51,6 +57,7 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
     $this->languageManager = $language_manager;
   }
 
+
   /**
    * {@inheritdoc}
    */
@@ -58,9 +65,6 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
     return [];
   }
 
-  /**
-   *
-   */
   protected function doUndoTransform($data, Context $context) {
     $language = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
     $uri = $data['uri'];
@@ -73,23 +77,14 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
     return $next_value;
   }
 
-  /**
-   *
-   */
   protected function doTransform($data, Context $context) {
     throw new \TypeError();
   }
 
-  /**
-   *
-   */
   public function prepareForInput($value) {
     return $value;
   }
 
-  /**
-   *
-   */
   public function getOutputJsonSchema() {
     return [
       'type' => 'object',
@@ -100,9 +95,6 @@ class CanonicalLinkToAliasEnhancer extends ResourceFieldEnhancerBase implements 
     ];
   }
 
-  /**
-   *
-   */
   public function getSettingsForm(array $resource_field_info) {
     return [];
   }

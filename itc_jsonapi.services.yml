@@ -2,7 +2,7 @@ services:
   cache.itc_jsonapi_include:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
-      - { name: cache.bin }
+    - { name: cache.bin }
     factory: cache_factory:get
     arguments: [itc_jsonapi_include]
   logger.channel.itc_jsonapi:
@@ -13,34 +13,31 @@ services:
     class: Drupal\itc_jsonapi\Normalizer\SearchApiItemNodeNormalizer
     arguments: ['@language_manager', '@entity_type.manager']
     tags:
-      - { name: normalizer, priority: 10 }
+    - { name: normalizer, priority: 10 }
   itc_jsonapi.contact_message_response_subscriber:
     class: Drupal\itc_jsonapi\EventSubscriber\ContactMessageResponseSubscriber
     arguments: ['@config.factory']
     tags:
-      - { name: event_subscriber }
+    - { name: event_subscriber }
   itc_jsonapi.include_entity_type_response_subscriber:
     class: Drupal\itc_jsonapi\EventSubscriber\IncludeEntityTypeResponseSubscriber
     arguments: ['@itc_jsonapi.entity_type_include', '@current_route_match']
     tags:
-      - { name: event_subscriber }
+    - { name: event_subscriber }
   itc_jsonapi.query_parser:
     class: Drupal\itc_jsonapi\Query\QueryParser
   itc_jsonapi.search_api.query_builder:
     class: Drupal\itc_jsonapi\SearchApi\QueryBuilder
     arguments: ['@language_manager', '@event_dispatcher', '@itc_jsonapi.query_parser']
-  itc_jsonapi.entity.to_jsonapi:
-    class: Drupal\itc_jsonapi\EntityToJsonApi
-    arguments: ['@jsonapi.serializer_do_not_use_removal_imminent', '@jsonapi.resource_type.repository', '@current_user', '@request_stack', '%jsonapi.base_path%']
   itc_jsonapi.authentication.token:
     class: Drupal\itc_jsonapi\Authentication\Provider\Token
     arguments: ['@config.factory', '@entity_type.manager']
     tags:
-      - { name: authentication_provider, provider_id: token, priority: 1 }
+    - { name: authentication_provider, provider_id: token, priority: 1 }
   itc_jsonapi.route_subscriber:
     class: Drupal\itc_jsonapi\Routing\RouteSubscriber
     tags:
-      - { name: event_subscriber }
+    - { name: event_subscriber }
   itc_jsonapi.alias_resolver:
     class: Drupal\itc_jsonapi\AliasResolver
     arguments: ['@language_manager', '@config.factory', '@path.alias_manager', '@entity_type.manager']

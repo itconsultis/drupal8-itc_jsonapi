@@ -1,6 +1,13 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: bertrand
+ * Date: 04/07/18
+ * Time: 21:14
+ */
 
 namespace Drupal\itc_jsonapi\JsonApi;
+
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -9,9 +16,6 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- *
- */
 class EntityTypeInclude {
 
   /**
@@ -35,17 +39,12 @@ class EntityTypeInclude {
 
   protected $cacheTags = [];
 
-  /**
-   *
-   */
   public function __construct(CurrentRouteMatch $route_match, CacheBackendInterface $cache) {
     $this->routeMatch = $route_match;
     $this->cache = $cache;
+    $this->entityRepository = \Drupal::service('entity.repository');
   }
 
-  /**
-   *
-   */
   protected function getAllowedFields(FieldableEntityInterface $entity) {
     $field_definitions = $entity->getFieldDefinitions();
     $field_key = $entity->getEntityTypeId() . '--' . $entity->bundle();
@@ -60,9 +59,6 @@ class EntityTypeInclude {
     return $this->fields[$field_key];
   }
 
-  /**
-   *
-   */
   protected function computeCid(FieldableEntityInterface $entity) {
     $cache_tag = $entity->getEntityTypeId() . ':' . $entity->id();
     $string_fields = json_encode($this->fields);
@@ -74,9 +70,6 @@ class EntityTypeInclude {
     return md5($cache_tag . $string_fields . $string_exclude . $revision_id);
   }
 
-  /**
-   *
-   */
   public function computeInclude(FieldableEntityInterface $entity, $prefix = '', $exclude = []) {
     $this->cacheTags[] = $entity->getEntityTypeId() . ':' . $entity->id();
     $allowed_fields = $this->getAllowedFields($entity);
@@ -112,9 +105,6 @@ class EntityTypeInclude {
     return $include;
   }
 
-  /**
-   *
-   */
   public function transformRequest(Request $request) {
     $raw_include = $request->query->get('include', '');
     $include = is_array($raw_include) ? $raw_include : explode(',', $raw_include);
@@ -128,22 +118,24 @@ class EntityTypeInclude {
     if ($format !== 'entity_type') {
       return;
     }
-    $possible_param_names = [
-      'node',
-      'node_preview',
-      'paragraph',
-    ];
-    foreach ($possible_param_names as $param_name) {
-      $entity = $this->routeMatch->getParameter($param_name);
-      if (!empty($entity)) {
-        break;
-      }
+    $path_parts = explode('/', $request->getPathInfo());
+    $uuid = count($path_parts) === 5 ? $path_parts[4] : NULL;
+    if (empty($uuid) && $path_parts[2] === 'node_preview') {
+      $uuid = $path_parts[3];
+    }
+    if (empty($uuid)) {
+      return;
     }
     $cid = md5($request->getPathInfo() . $request->getQueryString());
     $cache_item = $this->cache->get($cid);
     if (!empty($cache_item)) {
       $new_include = $cache_item->data;
       $request->query->set('include', implode(',', $new_include));
+      return;
+    }
+    $entity_type = $path_parts[2] === 'node_preview' ? 'node' : $path_parts[2];
+    $entity = $this->entityRepository->loadEntityByUuid($entity_type, $uuid);
+    if (empty($entity)) {
       return;
     }
     $this->includedEntityTypes = $entity_types;
