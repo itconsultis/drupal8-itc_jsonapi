@@ -49,17 +49,6 @@ itc_jsonapi.webform_controller.submit:
         type: 'entity:webform'
   requirements:
     _permission: 'access content'
-itc_jsonapi.node_preview_controller.node_preview:
-  path: '/jsonapi/node_preview/{node_preview}'
-  defaults:
-    _controller: '\Drupal\itc_jsonapi\Controller\NodePreviewController::preview'
-    _title: 'Preview'
-  requirements:
-    _node_preview_access: '{node_preview}'
-  options:
-    parameters:
-      node_preview:
-        type: 'node_preview'
 itc_jsonapi.auth_controller.token:
   path: '/auth/token'
   defaults:
