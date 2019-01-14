@@ -14,11 +14,6 @@ services:
     arguments: ['@language_manager', '@entity_type.manager']
     tags:
     - { name: normalizer, priority: 10 }
-  itc_jsonapi.contact_message_response_subscriber:
-    class: Drupal\itc_jsonapi\EventSubscriber\ContactMessageResponseSubscriber
-    arguments: ['@config.factory']
-    tags:
-    - { name: event_subscriber }
   itc_jsonapi.query_parser:
     class: Drupal\itc_jsonapi\Query\QueryParser
   itc_jsonapi.search_api.query_builder:
