@@ -10,6 +10,7 @@ namespace Drupal\itc_jsonapi\Controller;
 
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Url;
 use Drupal\itc_jsonapi\CacheableJsonApiResponse;
 use Drupal\itc_jsonapi\JsonApiResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,30 @@ class LanguageSwitcherController {
    */
   protected $entityRepository;
 
+  /**
+   * @var \Drupal\Core\Path\AliasManager
+   */
+  protected $aliasManager;
+
+  /**
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
 
   public function __construct() {
     $this->entityRepository = \Drupal::service('entity.repository');
     $this->languageManager = \Drupal::languageManager();
+    $this->aliasManager = \Drupal::service('path.alias_manager');
+    $this->configFactory = \Drupal::configFactory();
+  }
+
+  protected function resolvedPathIsHomePath($resolved_path) {
+    $home_path = $this->configFactory->get('system.site')->get('page.front');
+    if($resolved_path === $home_path) {
+      return TRUE;
+    }
+    return $this->aliasManager->getAliasByPath($home_path) === $resolved_path;
   }
 
   public function get(Request $request) {
@@ -44,12 +65,22 @@ class LanguageSwitcherController {
       return new JsonApiResponse('', 404);
     }
     $links = [];
+    $is_homepage = false;
     foreach ($this->languageManager->getLanguages() as $language) {
       $langcode = $language->getId();
       if ($entity->hasTranslation($langcode)) {
-        $links[$langcode] = $entity->toUrl('canonical', ['language' => $language])
+        $url = $entity->toUrl('canonical', ['language' => $language])
           ->toString(TRUE)
           ->getGeneratedUrl();
+        if (!$is_homepage) {
+          $is_homepage = $this->resolvedPathIsHomePath($url);
+        }
+        if ($is_homepage) {
+          $url = Url::fromRoute('<front>', [], ['language' => $language])
+            ->toString(TRUE)
+            ->getGeneratedUrl();
+        }
+        $links[$langcode] = $url;
       }
     }
     $response = new CacheableJsonApiResponse(json_encode(['links' => $links]));
