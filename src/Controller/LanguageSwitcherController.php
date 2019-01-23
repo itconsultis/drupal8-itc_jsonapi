@@ -10,6 +10,7 @@ namespace Drupal\itc_jsonapi\Controller;
 
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Language\Language;
 use Drupal\Core\Url;
 use Drupal\itc_jsonapi\CacheableJsonApiResponse;
 use Drupal\itc_jsonapi\JsonApiResponse;
@@ -42,12 +43,15 @@ class LanguageSwitcherController {
     $this->configFactory = \Drupal::configFactory();
   }
 
-  protected function resolvedPathIsHomePath($resolved_path) {
+  protected function resolvedPathIsHomePath($resolved_path, Language $language) {
     $home_path = $this->configFactory->get('system.site')->get('page.front');
     if($resolved_path === $home_path) {
       return TRUE;
     }
-    return $this->aliasManager->getAliasByPath($home_path) === $resolved_path;
+    $home_url = Url::fromUserInput($home_path, ['language' => $language])
+      ->toString(TRUE)
+      ->getGeneratedUrl();
+    return $home_url === $resolved_path;
   }
 
   public function get(Request $request) {
@@ -73,7 +77,7 @@ class LanguageSwitcherController {
           ->toString(TRUE)
           ->getGeneratedUrl();
         if (!$is_homepage) {
-          $is_homepage = $this->resolvedPathIsHomePath($url);
+          $is_homepage = $this->resolvedPathIsHomePath($url, $language);
         }
         if ($is_homepage) {
           $url = Url::fromRoute('<front>', [], ['language' => $language])
