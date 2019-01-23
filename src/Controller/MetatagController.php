@@ -12,6 +12,7 @@ namespace Drupal\itc_jsonapi\Controller;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Url;
 use Drupal\itc_jsonapi\CacheableJsonApiResponse;
 use Drupal\itc_jsonapi\JsonApiResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,18 @@ class MetatagController {
     $this->languageManager = \Drupal::languageManager();
     $this->metatagManager = \Drupal::service('metatag.manager');
     $this->cache = \Drupal::cache();
+    $this->configFactory = \Drupal::configFactory();
+  }
+
+  protected function isHomePath($path, LanguageInterface $language) {
+    $home_path = $this->configFactory->get('system.site')->get('page.front');
+    if($path === $home_path) {
+      return TRUE;
+    }
+    $home_url = Url::fromUserInput($home_path, ['language' => $language])
+      ->toString(TRUE)
+      ->getGeneratedUrl();
+    return $home_url === $path;
   }
 
   public function metatag(Request $request) {
@@ -70,7 +83,24 @@ class MetatagController {
         'data' => [],
       ];
       foreach ($metatags as $tag) {
-        $data['data'][] = $tag[0];
+        [$tag_data, $tag_name] = $tag;
+        switch ($tag_name) {
+          case 'canonical_url':
+            $path = parse_url($tag_data['#attributes']['href'], PHP_URL_PATH);
+            $tag_data['#attributes']['href'] = $path;
+            if ($this->isHomePath($path, $language)) {
+              $home_url = Url::fromRoute('<front>', [], ['language' => $language])
+                ->toString(TRUE)
+                ->getGeneratedUrl();
+              $tag_data['#attributes']['href'] = $home_url;
+            }
+            $data['data'][] = $tag_data;
+            break;
+
+          default:
+            $data['data'][] = $tag_data;
+            break;
+        }
       }
       $this->cache->set($cache_key, $data, Cache::PERMANENT, $entity->getCacheTags());
       $cache_item = $this->cache->get($cache_key);
