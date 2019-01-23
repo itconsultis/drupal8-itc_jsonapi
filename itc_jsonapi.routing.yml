@@ -1,10 +1,3 @@
-itc_jsonapi.default_controller.path_resolve:
-  path: '/api/alias/resolve'
-  defaults:
-    _controller: '\Drupal\itc_jsonapi\Controller\AliasController::resolve'
-    _title: 'Path resolver'
-  requirements:
-    _permission: 'access content'
 itc_jsonapi.default_controller.search:
   path: '/jsonapi/search/{index}'
   defaults:
@@ -17,14 +10,6 @@ itc_jsonapi.default_controller.search:
     parameters:
       index:
         type: entity:search_api_index
-itc_jsonapi.file_controller.file_upload:
-  path: '/api/file_data'
-  methods: ['POST']
-  defaults:
-    _controller: '\Drupal\itc_jsonapi\Controller\FileController::fileUpload'
-    _title: 'File upload'
-  requirements:
-    _permission: 'access content'
 itc_jsonapi.webform_controller.validate:
   path: '/jsonapi/webform/{webform}/validate'
   methods: ['POST']

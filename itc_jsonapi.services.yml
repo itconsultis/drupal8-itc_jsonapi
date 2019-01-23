@@ -28,9 +28,6 @@ services:
     class: Drupal\itc_jsonapi\Routing\RouteSubscriber
     tags:
     - { name: event_subscriber }
-  itc_jsonapi.alias_resolver:
-    class: Drupal\itc_jsonapi\AliasResolver
-    arguments: ['@language_manager', '@config.factory', '@path.alias_manager', '@entity_type.manager']
   itc_jsonapi.jwt:
     class: Drupal\itc_jsonapi\JWT
     arguments: ['@config.factory', '@request_stack', '@current_user', '@logger.channel.itc_jsonapi']
