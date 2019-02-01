@@ -55,7 +55,12 @@ class JWT {
    * @param \Psr\Log\LoggerInterface $logger
    *   Request stack service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, RequestStack $request_stack, AccountProxyInterface $account, LoggerInterface $logger) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    RequestStack $request_stack,
+    AccountProxyInterface $account,
+    LoggerInterface $logger
+  ) {
     $this->key = $config_factory->get('itc_jsonapi')->get('encryption_key');
     $this->request = $request_stack->getMasterRequest();
     $this->account = $account;

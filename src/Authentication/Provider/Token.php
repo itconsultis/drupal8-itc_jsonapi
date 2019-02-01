@@ -67,7 +67,7 @@ class Token implements AuthenticationProviderInterface {
    * {@inheritdoc}
    */
   public function authenticate(Request $request) {
-    $authorization = $request->headers->get('Authorization');
+    $authorization = $request->get('Authorization');
     $bearer = json_decode($this->getBearerToken($authorization), TRUE);
     $key = $this->configFactory->get('itc_jsonapi')->get('encryption_key');
     $data = $this->jwtDecode($bearer, $key);
