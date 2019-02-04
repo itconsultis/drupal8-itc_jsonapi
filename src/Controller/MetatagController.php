@@ -91,6 +91,7 @@ class MetatagController {
           $tag_data['#attributes']['href'] = $path;
           if ($this->isHomePath($path, $language)) {
             $home_url = Url::fromRoute('<front>', [], ['language' => $language])
+              ->setAbsolute()
               ->toString(TRUE)
               ->getGeneratedUrl();
             $tag_data['#attributes']['href'] = $home_url;
