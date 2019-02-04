@@ -108,6 +108,8 @@ class MetatagController {
     if (!empty($context->isEmpty())) {
       $response->addCacheableDependency($context->pop());
     }
+    $metadata = $response->getCacheableMetadata();
+    $metadata->addCacheContexts(['url.query_args:entity_type', 'url.query_args:id']);
     return $response;
   }
 }
