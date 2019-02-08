@@ -114,10 +114,7 @@ class SearchController extends ControllerBase {
       ->getStorage('node')
       ->loadMultiple(array_keys($items));
     $data = [];
-    $language = $this->languageManager->getLanguage($request->query->get('langcode'));
-    if (empty($language)) {
-      $language = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
-    }
+    $language = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
     foreach ($items as $nid => $item) {
       $data[] = $this->serializer->normalize($item, 'api_json', [
         'language' => $language,

@@ -52,21 +52,17 @@ class SearchApiItemNodeNormalizer implements NormalizerInterface {
       $node_storage = $this->entityTypeManager->getStorage('node');
       $node = $node_storage->load($nid);
     }
-    $path = [];
-    $languages = $this->languageManager->getLanguages();
     $type = $node->bundle();
     $uuid = $node->uuid();
-    foreach ($languages as $language) {
-      $url = Url::fromRoute("entity.node.canonical", [
-        'node' => $node->id(),
-      ], [
-        'language' => $language,
-      ])->toString(TRUE)->getGeneratedUrl();
-      $path[$language->getId()] = [
-        'alias' => $url,
-        'langcode' => $language->getId(),
-      ];
-    }
+    $url = Url::fromRoute("entity.node.canonical", [
+      'node' => $node->id(),
+    ], [
+      'language' => $current_language,
+    ])->toString(TRUE)->getGeneratedUrl();
+    $path = [
+      'alias' => $url,
+      'langcode' => $current_language->getId(),
+    ];
     if ($node->hasTranslation($current_language->getId())) {
       $t_node = $node->getTranslation($current_language->getId());
     }
