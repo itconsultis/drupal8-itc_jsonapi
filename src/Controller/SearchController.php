@@ -78,7 +78,7 @@ class SearchController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('itc_jsonapi.search_api.query_builder'),
       $container->get('serializer'),
-      $container->get('logger.channel.itc_jsonapi'),
+      $container->get('logger.channel.itc_jsonapi')
     );
   }
 
