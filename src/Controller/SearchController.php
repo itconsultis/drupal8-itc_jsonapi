@@ -11,6 +11,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\itc_jsonapi\SearchApi\QueryBuilder;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\Query;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,18 +48,25 @@ class SearchController extends ControllerBase {
   protected $serializer;
 
   /**
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a new DefaultController object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     QueryBuilder $query_builder,
-    Serializer $serializer
+    Serializer $serializer,
+    LoggerInterface $logger
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->queryBuilder = $query_builder;
     $this->serializer = $serializer;
+    $this->logger = $logger;
   }
 
   /**
@@ -69,7 +77,8 @@ class SearchController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('language_manager'),
       $container->get('itc_jsonapi.search_api.query_builder'),
-      $container->get('serializer')
+      $container->get('serializer'),
+      $container->get('logger.channel.itc_jsonapi'),
     );
   }
 
@@ -85,6 +94,8 @@ class SearchController extends ControllerBase {
       $result = $query->execute();
     }
     catch (\Exception $e) {
+      $this->logger->critical($e->getMessage());
+      $this->logger->critical($e->getTraceAsString());
       $response = new JsonResponse([
         'errors' => [
           'Unexpected error.',
