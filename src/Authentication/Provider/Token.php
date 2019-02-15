@@ -54,9 +54,16 @@ class Token implements AuthenticationProviderInterface {
    *   request, FALSE otherwise.
    */
   public function applies(Request $request) {
-    $pathInfo = $request->getpathInfo();
-    if (strpos($pathInfo, '/jsonapi') === 0) {
-      return $request->headers->has('Authorization');
+    $path_info = $request->getpathInfo();
+    $path_parts = explode('/', substr($path_info, 1));
+    if (empty($path_parts)) {
+      return FALSE;
+    }
+    if ($path_parts[0] === 'jsonapi') {
+      return TRUE;
+    }
+    if (count($path_parts) >= 2 && $path_parts[1] === 'jsonapi') {
+      return TRUE;
     }
     // If you return TRUE and the method Authentication logic fails,
     // you will get out from Drupal navigation if you are logged in.
@@ -67,8 +74,11 @@ class Token implements AuthenticationProviderInterface {
    * {@inheritdoc}
    */
   public function authenticate(Request $request) {
-    $authorization = $request->get('Authorization');
-    $bearer = json_decode($this->getBearerToken($authorization), TRUE);
+    $authorization = $request->headers->get('authorization');
+    if (empty($authorization)) {
+      $authorization = $request->get('authorization');
+    }
+    $bearer = $this->getBearerToken($authorization);
     $key = $this->configFactory->get('itc_jsonapi')->get('encryption_key');
     $data = $this->jwtDecode($bearer, $key);
     if (!empty($data)) {
