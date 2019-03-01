@@ -17,7 +17,10 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection) {
     foreach ($collection as $route) {
-      if (strpos($route->getPath(), '/jsonapi') === 0) {
+      if (
+        strpos($route->getPath(), '/jsonapi') === 0
+        || strpos($route->getPath(), '/router/translate-path') === 0
+      ) {
         $route->setOption('_auth', ['token', 'cookie']);
       }
     }

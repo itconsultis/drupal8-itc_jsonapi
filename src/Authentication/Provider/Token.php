@@ -62,8 +62,13 @@ class Token implements AuthenticationProviderInterface {
     if ($path_parts[0] === 'jsonapi') {
       return TRUE;
     }
-    if (count($path_parts) >= 2 && $path_parts[1] === 'jsonapi') {
-      return TRUE;
+    if (count($path_parts) >= 2) {
+      if ($path_parts[1] === 'jsonapi') {
+        return TRUE;
+      }
+      if ($path_parts[1] === 'router' && $path_parts[2] === 'translate-path') {
+        return TRUE;
+      }
     }
     // If you return TRUE and the method Authentication logic fails,
     // you will get out from Drupal navigation if you are logged in.
