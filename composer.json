@@ -1,14 +1,14 @@
 {
-  "name": "drupal/itc_jsonapi",
+  "name": "itconsultis/itc_jsonapi",
   "type": "drupal-module",
-  "description": "jsonapi enhencers",
+  "description": "Provides extra features for jsonapi.",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
-  "homepage": "https://www.drupal.org/project/itc_jsonapi",
+  "homepage": "https://github.com/itconsultis/drupal8-itc_jsonapi",
   "minimum-stability": "dev",
-  "support": {
-    "issues": "https://www.drupal.org/project/issues/itc_jsonapi",
-    "source": "http://cgit.drupalcode.org/itc_jsonapi"
-  },
-  "require": { }
+  "require": {
+    "php": ">=7.2.0",
+    "drupal/core": "^8.5",
+    "drupal/jsonapi_extras": "2.10"
+  }
 }
