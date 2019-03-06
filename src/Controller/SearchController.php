@@ -54,8 +54,7 @@ class SearchController extends ControllerBase {
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     QueryBuilder $query_builder,
-    Serializer $serializer,
-    AliasResolver $alias_resolver
+    Serializer $serializer
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;

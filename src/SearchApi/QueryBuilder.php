@@ -66,14 +66,14 @@ class QueryBuilder {
   public function applyLanguageFilter($langcode = '', QueryInterface $query) {
     $index = $query->getIndex();
     $field_names = array_keys($index->getFields());
-    if (!in_array('language', $field_names)) {
+    if (!in_array('langcode', $field_names)) {
       return;
     }
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     }
     $language = $this->languageManager->getLanguage($langcode);
-    $query->addCondition('language', $language->getId());
+    $query->addCondition('langcode', $language->getId());
   }
 
   /**
