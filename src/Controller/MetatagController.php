@@ -109,7 +109,7 @@ class MetatagController {
       $response->addCacheableDependency($context->pop());
     }
     $metadata = $response->getCacheableMetadata();
-    $metadata->addCacheContexts(['url.query_args:entity_type', 'url.query_args:id']);
+    $metadata->addCacheContexts(['languages', 'url.query_args:entity_type', 'url.query_args:id']);
     return $response;
   }
 }
