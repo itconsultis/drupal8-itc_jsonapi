@@ -10,6 +10,7 @@ namespace Drupal\itc_jsonapi\Controller;
 
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\itc_jsonapi\CacheableJsonApiResponse;
 use Drupal\itc_jsonapi\JsonApiResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -54,9 +55,12 @@ class AccountController implements ContainerInjectionInterface {
       'type' => 'account',
       'attributes' => $attributes,
     ];
-    return new JsonApiResponse(json_encode([
+    $response = new CacheableJsonApiResponse(json_encode([
       'data' => $data,
     ]));
+    $cache_metadata = $response->getCacheableMetadata();
+    $cache_metadata->setCacheContexts(['user']);
+    return $response;
   }
 
 }
