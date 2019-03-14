@@ -9,8 +9,6 @@
 namespace Drupal\itc_jsonapi\Controller;
 
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Url;

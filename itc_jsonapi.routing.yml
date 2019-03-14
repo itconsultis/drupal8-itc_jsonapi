@@ -1,3 +1,9 @@
+itc_jsonapi.account.me:
+  path: '/jsonapi/account/me'
+  defaults:
+    _controller: '\Drupal\itc_jsonapi\Controller\AccountController::me'
+  requirements:
+    _access: 'TRUE'
 itc_jsonapi.default_controller.search:
   path: '/jsonapi/search/{index}'
   defaults:
