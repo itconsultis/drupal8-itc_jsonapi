@@ -59,7 +59,7 @@ class Token implements AuthenticationProviderInterface {
     if (empty($path_parts)) {
       return FALSE;
     }
-    if ($path_parts[0] === 'jsonapi') {
+    if ($path_parts[0] === 'jsonapi' || $path_parts[0] === 'router') {
       return TRUE;
     }
     if (count($path_parts) >= 2) {
