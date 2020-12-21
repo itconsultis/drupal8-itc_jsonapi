@@ -4,7 +4,7 @@
   "description": "Provides extra features for jsonapi.",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
-  "homepage": "https://github.com/itconsultis/drupal8-itc_jsonapi",
+  "homepage": "https://packagist.org/packages/itconsultis/itc_jsonapi",
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.2.0",
