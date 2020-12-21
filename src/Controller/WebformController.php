@@ -27,12 +27,12 @@ class WebformController {
   }
 
   protected function getJsonBodyOrErrorResponse(Request $request) {
-    $data = json_decode($request->getContent(), true);
+    $data = json_decode($request->getContent(), TRUE);
     if (json_last_error() !== JSON_ERROR_NONE) {
       return $this->jsonApiResponse([
         'errors' => [
           'Invalid data type. Only json data supported',
-        ]
+        ],
       ]);
     }
     return $data;
@@ -48,7 +48,7 @@ class WebformController {
       'data' => $data,
     ];
     return $this->jsonApiResponse([
-      'errors' => WebformSubmissionForm::validateFormValues($values)
+      'errors' => WebformSubmissionForm::validateFormValues($values),
     ]);
   }
 
@@ -57,8 +57,6 @@ class WebformController {
     if ($data instanceof JsonResponse) {
       return $data;
     }
-   
-    $data['data'] = $this->formatEmptyFields($data['data'], $webform);
     $values = [
       'webform_id' => $webform->id(),
       'data' => $data['data'],
@@ -75,17 +73,6 @@ class WebformController {
     return $this->jsonApiResponse([
       'errors' => $result,
     ], 400);
-  }
-
-  private function formatEmptyFields($submission, Webform $webform) {
-    $fields = $webform->getElementsDecoded();
-    foreach($fields as $key => $settings) {
-      // for non mandatory fields only
-      if(empty($settings['#required'])){
-        !empty($submission[$key]) ?: $submission[$key] = '';
-      }
-    }
-    return $submission;
   }
 
 }
