@@ -31,3 +31,7 @@ services:
   itc_jsonapi.jwt:
     class: Drupal\itc_jsonapi\JWT
     arguments: ['@config.factory', '@request_stack', '@current_user', '@logger.channel.itc_jsonapi']
+  itc_jsonapi.request_policy.no_authorization_headers:
+    class: Drupal\itc_jsonapi\PageCache\RequestPolicy\NoAuthorizationHeader
+    tags:
+      - { name: 'page_cache_request_policy' }
