@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 class NoAuthorizationHeader implements RequestPolicyInterface {
 
   public function check(Request $request) {
-    return $request->headers->has('authorization')
-      ? NoAuthorizationHeader::DENY
-      : NoAuthorizationHeader::ALLOW;
+    if ($request->headers->has('authorization')) {
+      return NoAuthorizationHeader::DENY;
+    }
   }
 
 }
