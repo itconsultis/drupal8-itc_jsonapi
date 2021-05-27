@@ -8,7 +8,7 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.2.0",
-    "drupal/core": "^8.6",
+    "drupal/core": "^8.6|^9.0",
     "drupal/jsonapi_extras": "^3.0",
     "firebase/php-jwt": "^5.0"
   }

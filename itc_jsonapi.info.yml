@@ -2,6 +2,7 @@ name: ITC JSON API
 type: module
 description: jsonapi field enhancers
 core: 8.x
+core_version_requirement: '^8 || ^9'
 package: ITC
 requirements:
   - jsonapi_extras
