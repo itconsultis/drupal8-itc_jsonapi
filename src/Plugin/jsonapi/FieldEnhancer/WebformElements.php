@@ -92,8 +92,10 @@ class WebformElements extends ResourceFieldEnhancerBase implements ContainerFact
     $webform = Webform::load($webform_id);
     $original_langcode = $this->getTranslationManager()->getOriginalLangcode($webform);
     /** @var Webform $source_webform */
-    $source_elements = $this->getTranslationManager()->getElements($webform, $original_langcode);
     $elements = $webform->getElementsInitialized();
+    $source_elements = $this->getTranslationManager()->getElements($webform, $original_langcode);
+    $webform->setElements($source_elements);
+    $source_elements = $webform->getElementsInitialized();
     WebformElementHelper::merge($source_elements, $elements);
     return $source_elements;
   }
