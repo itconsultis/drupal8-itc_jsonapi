@@ -9,12 +9,12 @@
 namespace Drupal\itc_jsonapi\Plugin\jsonapi\FieldEnhancer;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Url;
 use Drupal\jsonapi_extras\Plugin\ResourceFieldEnhancerBase;
 use Drupal\webform\Entity\Webform;
+use Drupal\webform\Utility\WebformElementHelper;
+use Drupal\webform\WebformTranslationManagerInterface;
 use Shaper\Util\Context;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -76,6 +76,13 @@ class WebformElements extends ResourceFieldEnhancerBase implements ContainerFact
     return [];
   }
 
+  /**
+   * @return WebformTranslationManagerInterface
+   */
+  protected function getTranslationManager() {
+    return \Drupal::service('webform.translation_manager');
+  }
+
 
   protected function doUndoTransform($data, Context $context) {
     /** @var \Drupal\jsonapi\JsonApiResource\ResourceObject $resource_object */
@@ -83,7 +90,12 @@ class WebformElements extends ResourceFieldEnhancerBase implements ContainerFact
     $webform_id = $resource_object->getField('drupal_internal__id');
     /** @var Webform $webform */
     $webform = Webform::load($webform_id);
-    return $webform->getElementsInitialized();
+    $original_langcode = $this->getTranslationManager()->getOriginalLangcode($webform);
+    /** @var Webform $source_webform */
+    $source_elements = $this->getTranslationManager()->getElements($webform, $original_langcode);
+    $elements = $webform->getElementsInitialized();
+    WebformElementHelper::merge($source_elements, $elements);
+    return $source_elements;
   }
 
   protected function doTransform($data, Context $context) {
