@@ -40,8 +40,8 @@ class LanguageSwitcherController {
     $this->entityRepository = \Drupal::service('entity.repository');
     $this->languageManager = \Drupal::languageManager();
     $this->aliasManager = \Drupal::hasService('path_alias.manager')
-      ? \Drupal:service('path_alias.manager') // Drupal >=9.2
-      : \Drupal:service('path.alias_manager') //Drupal 8
+      ? \Drupal::service('path_alias.manager') // Drupal >=9.2
+      : \Drupal::service('path.alias_manager') //Drupal 8
     ;
     $this->configFactory = \Drupal::configFactory();
   }
